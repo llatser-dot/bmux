@@ -6360,8 +6360,6 @@ struct ContentView: View {
             return CmuxSurfaceTabBarBuiltInAction.splitRight.configID
         case "palette.terminalSplitDown":
             return CmuxSurfaceTabBarBuiltInAction.splitDown.configID
-        case "palette.equalizeSplits":
-            return CmuxSurfaceTabBarBuiltInAction.equalizeSplits.configID
         case "palette.tilePanes":
             return CmuxSurfaceTabBarBuiltInAction.tilePanes.configID
         default:
@@ -7589,15 +7587,6 @@ struct ContentView: View {
         )
         contributions.append(
             CommandPaletteCommandContribution(
-                commandId: "palette.equalizeSplits",
-                title: constant(String(localized: "command.equalizeSplits.title", defaultValue: "Equalize Splits")),
-                subtitle: workspaceSubtitle,
-                keywords: ["split", "equalize", "balance", "divider", "layout"],
-                when: { $0.bool(CommandPaletteContextKeys.workspaceHasSplits) }
-            )
-        )
-        contributions.append(
-            CommandPaletteCommandContribution(
                 commandId: "palette.tilePanes",
                 title: constant(String(localized: "command.tilePanes.title", defaultValue: "Tile Panes")),
                 subtitle: workspaceSubtitle,
@@ -8215,13 +8204,6 @@ struct ContentView: View {
         registry.register(commandId: "palette.toggleSplitZoom") {
             if !tabManager.toggleFocusedSplitZoom() {
                 NSSound.beep()
-            }
-        }
-        registry.register(commandId: "palette.equalizeSplits") {
-            if let workspace = tabManager.selectedWorkspace, !tabManager.equalizeSplits(tabId: workspace.id) {
-#if DEBUG
-                cmuxDebugLog("palette.equalizeSplits result=noSplitOrFailed workspaceId=\(workspace.id)")
-#endif
             }
         }
         registry.register(commandId: "palette.tilePanes") {

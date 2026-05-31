@@ -72,7 +72,6 @@ public enum ShortcutAction: String, CaseIterable, Sendable, Hashable, SettingCod
     case splitRight
     case splitDown
     case toggleSplitZoom
-    case equalizeSplits
     case splitBrowserRight
     case splitBrowserDown
     case toggleRightSidebar = "toggleFileExplorer"
@@ -139,7 +138,7 @@ extension ShortcutAction {
              .focusTextBoxInput, .attachTextBoxFile:
             return .navigation
         case .focusLeft, .focusRight, .focusUp, .focusDown, .splitRight, .splitDown,
-             .toggleSplitZoom, .equalizeSplits, .splitBrowserRight, .splitBrowserDown,
+             .toggleSplitZoom, .splitBrowserRight, .splitBrowserDown,
              .toggleRightSidebar:
             return .panes
         case .saveFilePreview, .openBrowser, .focusBrowserAddressBar, .browserBack,
@@ -208,7 +207,6 @@ extension ShortcutAction {
         case .splitRight: return "Split Right"
         case .splitDown: return "Split Down"
         case .toggleSplitZoom: return "Toggle Pane Zoom"
-        case .equalizeSplits: return "Equalize Splits"
         case .splitBrowserRight: return "Split Browser Right"
         case .splitBrowserDown: return "Split Browser Down"
         case .toggleRightSidebar: return "Toggle Right Sidebar"

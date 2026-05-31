@@ -57,7 +57,6 @@ extension ShortcutAction {
         case .splitRight: return ShortcutStroke(key: "d", command: true)
         case .splitDown: return ShortcutStroke(key: "d", command: true, shift: true)
         case .toggleSplitZoom: return ShortcutStroke(key: "\r", command: true, shift: true)
-        case .equalizeSplits: return ShortcutStroke(key: "=", command: true, control: true)
         case .splitBrowserRight: return ShortcutStroke(key: "d", command: true, option: true)
         case .splitBrowserDown: return ShortcutStroke(key: "d", command: true, shift: true, option: true)
         case .nextSurface: return ShortcutStroke(key: "]", command: true, shift: true)

@@ -13047,7 +13047,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
 #endif
             return true
         }
-        if matchConfiguredShortcut(event: event, action: .equalizeSplits) { performEqualizeSplitsShortcut(); return true }
         // Configured split actions.
         if matchConfiguredShortcut(event: event, action: .splitRight) {
 #if DEBUG
@@ -14663,13 +14662,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
                 )
                 if didSplit { onExecuted?() }
                 return didSplit
-            case .equalizeSplits:
-                guard let workspace = context.tabManager.selectedWorkspace else {
-                    return false
-                }
-                let didEqualize = context.tabManager.equalizeSplits(tabId: workspace.id)
-                if didEqualize { onExecuted?() }
-                return didEqualize
             case .tilePanes:
                 guard let workspace = context.tabManager.selectedWorkspace else {
                     return false

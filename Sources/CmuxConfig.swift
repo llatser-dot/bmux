@@ -1173,7 +1173,6 @@ struct CmuxSurfaceTabBarButton: Codable, Sendable, Hashable, Identifiable {
     static let newBrowser = actionReference(CmuxSurfaceTabBarBuiltInAction.newBrowser.configID)
     static let splitRight = actionReference(CmuxSurfaceTabBarBuiltInAction.splitRight.configID)
     static let splitDown = actionReference(CmuxSurfaceTabBarBuiltInAction.splitDown.configID)
-    static let equalizeSplits = actionReference(CmuxSurfaceTabBarBuiltInAction.equalizeSplits.configID)
     static let tilePanes = actionReference(CmuxSurfaceTabBarBuiltInAction.tilePanes.configID)
 
     static let defaults: [CmuxSurfaceTabBarButton] = [
@@ -1181,7 +1180,6 @@ struct CmuxSurfaceTabBarButton: Codable, Sendable, Hashable, Identifiable {
         .newBrowser,
         .splitRight,
         .splitDown,
-        .equalizeSplits,
         .tilePanes
     ]
 
@@ -1571,9 +1569,6 @@ struct CmuxResolvedConfigAction: Identifiable, Sendable, Hashable {
         case .splitDown:
             title = String(localized: "command.terminalSplitDown.title", defaultValue: "Split Down")
             keywords = ["terminal", "split", "down"]
-        case .equalizeSplits:
-            title = String(localized: "command.equalizeSplits.title", defaultValue: "Equalize Splits")
-            keywords = ["terminal", "split", "equalize", "balance", "divider", "layout"]
         case .tilePanes:
             title = String(localized: "command.tilePanes.title", defaultValue: "Tile Panes")
             keywords = ["terminal", "split", "tile", "grid", "organize", "layout"]
@@ -2263,7 +2258,6 @@ final class CmuxConfigStore: ObservableObject {
             .builtIn(.newBrowser),
             .builtIn(.splitRight),
             .builtIn(.splitDown),
-            .builtIn(.equalizeSplits),
             .builtIn(.tilePanes)
         ]
         let resolvedButtons = resolvedSurfaceTabBarButtons(

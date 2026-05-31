@@ -857,7 +857,6 @@ struct cmuxApp: App {
                 performBrowserSplitFromMenu(direction: .down)
             }
 
-            equalizeSplitsCommandButton()
             tilePanesCommandButton()
             Divider()
 

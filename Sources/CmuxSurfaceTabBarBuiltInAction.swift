@@ -8,7 +8,6 @@ enum CmuxSurfaceTabBarBuiltInAction: String, Codable, Sendable, CaseIterable, Ha
     case newBrowser = "cmux.newBrowser"
     case splitRight = "cmux.splitRight"
     case splitDown = "cmux.splitDown"
-    case equalizeSplits = "cmux.equalizeSplits"
     case tilePanes = "cmux.tilePanes"
 
     init?(configID: String) {
@@ -27,8 +26,6 @@ enum CmuxSurfaceTabBarBuiltInAction: String, Codable, Sendable, CaseIterable, Ha
             self = .splitRight
         case "cmux.splitDown", "splitDown":
             self = .splitDown
-        case "cmux.equalizeSplits", "equalizeSplits", "equalize", "balance":
-            self = .equalizeSplits
         case "cmux.tilePanes", "tilePanes", "tile", "organize", "organise":
             self = .tilePanes
         default:
@@ -54,8 +51,6 @@ enum CmuxSurfaceTabBarBuiltInAction: String, Codable, Sendable, CaseIterable, Ha
             return "square.split.2x1"
         case .splitDown:
             return "square.split.1x2"
-        case .equalizeSplits:
-            return "square.grid.2x2"
         case .tilePanes:
             return "rectangle.grid.2x2"
         }
@@ -63,7 +58,7 @@ enum CmuxSurfaceTabBarBuiltInAction: String, Codable, Sendable, CaseIterable, Ha
 
     var bonsplitAction: BonsplitConfiguration.SplitActionButton.Action? {
         switch self {
-        case .newWorkspace, .cloudVM, .equalizeSplits, .tilePanes:
+        case .newWorkspace, .cloudVM, .tilePanes:
             return nil
         case .newTerminal:
             return .newTerminal
