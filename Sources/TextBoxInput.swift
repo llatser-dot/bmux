@@ -22,8 +22,8 @@ private enum TextBoxLayout {
     static let iconSymbolSize: CGFloat = 13
     static let sendSymbolSize: CGFloat = 14
     static let buttonBottomPadding: CGFloat = 3
-    static let leadingButtonHorizontalOffset: CGFloat = -1
-    static let trailingButtonHorizontalOffset: CGFloat = 1
+    static let leadingButtonHorizontalOffset: CGFloat = -2
+    static let trailingButtonHorizontalOffset: CGFloat = 2
     static let attachmentControlSpacing: CGFloat = 2
     static let attachmentImageSize: CGFloat = 16
     static let attachmentChipHeight: CGFloat = 18
@@ -119,9 +119,8 @@ final class TextBoxFilePanelFocusRestorer {
     }
 }
 
-private struct TextBoxInputGlassPillBackground: View {
+private struct TextBoxInputPillBackground: View {
     let foreground: Color
-    let fallbackTint: Color
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: TextBoxLayout.pillCornerRadius, style: .continuous)
@@ -130,51 +129,57 @@ private struct TextBoxInputGlassPillBackground: View {
         if #available(macOS 26.0, *) {
             shape
                 .fill(Color.clear)
-                .glassEffect(.regular.interactive(true), in: shape)
+                .glassEffect(.clear.interactive(true), in: shape)
                 .overlay {
-                    shape.stroke(Color.white.opacity(0.24), lineWidth: 0.85)
+                    shape.stroke(foreground.opacity(0.32), lineWidth: 1)
                 }
-                .shadow(color: Color.black.opacity(0.18), radius: 12, y: 4)
         } else {
-            fallback(shape)
+            outline(shape)
         }
 #else
-        fallback(shape)
+        outline(shape)
 #endif
     }
 
     @ViewBuilder
-    private func fallback(_ shape: RoundedRectangle) -> some View {
+    private func outline(_ shape: RoundedRectangle) -> some View {
         shape
-            .fill(.regularMaterial)
-            .overlay(
-                shape.fill(
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.12),
-                            fallbackTint.opacity(0.20),
-                            Color.black.opacity(0.06)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-            )
-            .overlay(
-                shape.stroke(
-                    LinearGradient(
-                        colors: [
-                            Color.white.opacity(0.34),
-                            foreground.opacity(0.16),
-                            Color.black.opacity(0.16)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 1
-                )
-            )
-            .shadow(color: Color.black.opacity(0.18), radius: 12, y: 4)
+            .fill(Color.clear)
+            .overlay {
+                shape.stroke(foreground.opacity(0.32), lineWidth: 1)
+            }
+    }
+}
+
+private struct TextBoxIconButtonBackground: View {
+    let foreground: Color
+
+    var body: some View {
+        let shape = Circle()
+
+#if compiler(>=6.2)
+        if #available(macOS 26.0, *) {
+            shape
+                .fill(Color.clear)
+                .glassEffect(.clear.interactive(true), in: shape)
+                .overlay {
+                    shape.stroke(foreground.opacity(0.32), lineWidth: 1)
+                }
+        } else {
+            outline(shape)
+        }
+#else
+        outline(shape)
+#endif
+    }
+
+    @ViewBuilder
+    private func outline(_ shape: Circle) -> some View {
+        shape
+            .fill(Color.clear)
+            .overlay {
+                shape.stroke(foreground.opacity(0.32), lineWidth: 1)
+            }
     }
 }
 
@@ -3195,7 +3200,6 @@ struct TextBoxInputContainer: View {
         let maxHeight = heightForLines(max(TextBoxLayout.minLines, maxLines))
         let clampedHeight = max(minHeight, min(maxHeight, textViewHeight))
         let foreground = Color(nsColor: terminalForegroundColor)
-        let background = Color(nsColor: terminalBackgroundColor)
         let canSend = !hasPendingAttachmentUpload
             && (!text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !attachments.isEmpty)
 
@@ -3251,10 +3255,7 @@ struct TextBoxInputContainer: View {
         .padding(.horizontal, TextBoxLayout.pillHorizontalPadding)
         .padding(.vertical, TextBoxLayout.pillVerticalPadding)
         .background(
-            TextBoxInputGlassPillBackground(
-                foreground: foreground,
-                fallbackTint: background
-            )
+            TextBoxInputPillBackground(foreground: foreground)
         )
         .padding(.horizontal, 10)
         .padding(.vertical, 7)
@@ -3266,12 +3267,7 @@ struct TextBoxInputContainer: View {
                 .font(.system(size: TextBoxLayout.iconSymbolSize, weight: .semibold))
                 .frame(width: TextBoxLayout.iconButtonSize, height: TextBoxLayout.iconButtonSize)
                 .background(
-                    Circle()
-                        .fill(foreground.opacity(0.10))
-                        .overlay(
-                            Circle()
-                                .stroke(Color.white.opacity(0.18), lineWidth: 0.8)
-                        )
+                    TextBoxIconButtonBackground(foreground: foreground)
                 )
         }
         .buttonStyle(.plain)
