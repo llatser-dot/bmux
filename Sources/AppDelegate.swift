@@ -14663,6 +14663,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
                 )
                 if didSplit { onExecuted?() }
                 return didSplit
+            case .equalizeSplits:
+                guard let workspace = context.tabManager.selectedWorkspace else {
+                    return false
+                }
+                let didEqualize = context.tabManager.equalizeSplits(tabId: workspace.id)
+                if didEqualize { onExecuted?() }
+                return didEqualize
+            case .tilePanes:
+                guard let workspace = context.tabManager.selectedWorkspace else {
+                    return false
+                }
+                let didTile = context.tabManager.tilePanes(tabId: workspace.id)
+                if didTile { onExecuted?() }
+                return didTile
             }
         case .command, .agent, .workspaceCommand:
             guard let cmuxConfigStore = context.cmuxConfigStore else {

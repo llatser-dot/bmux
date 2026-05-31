@@ -12,6 +12,17 @@ extension TabManager {
         return result.didFullyEqualize
     }
 
+    func tilePanes(tabId: UUID) -> Bool {
+        guard let tab = tabs.first(where: { $0.id == tabId }) else { return false }
+        guard tab.tilePanesIntoGrid() else { return false }
+
+        let result = equalizeSplitsOnce(in: tab)
+        if result.foundSplit {
+            tab.didProgrammaticallyChangeSplitGeometry()
+        }
+        return true
+    }
+
     @discardableResult
     private func equalizeSplitsOnce(in tab: Workspace) -> SplitEqualizer.Result {
         SplitEqualizer.equalize(

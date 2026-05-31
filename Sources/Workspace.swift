@@ -18860,6 +18860,10 @@ extension Workspace: BonsplitDelegate {
                     preferredWindow: presentingWindow,
                     debugSource: "surfaceTabBar.cloudVM"
                 )
+            case .equalizeSplits:
+                _ = owningTabManager?.equalizeSplits(tabId: id)
+            case .tilePanes:
+                _ = owningTabManager?.tilePanes(tabId: id)
             case .newTerminal, .newBrowser, .splitRight, .splitDown:
                 break
             }

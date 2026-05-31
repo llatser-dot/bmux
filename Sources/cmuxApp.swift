@@ -858,6 +858,7 @@ struct cmuxApp: App {
             }
 
             equalizeSplitsCommandButton()
+            tilePanesCommandButton()
             Divider()
 
             // Numbered workspace selection (9 = last workspace)

@@ -6360,6 +6360,10 @@ struct ContentView: View {
             return CmuxSurfaceTabBarBuiltInAction.splitRight.configID
         case "palette.terminalSplitDown":
             return CmuxSurfaceTabBarBuiltInAction.splitDown.configID
+        case "palette.equalizeSplits":
+            return CmuxSurfaceTabBarBuiltInAction.equalizeSplits.configID
+        case "palette.tilePanes":
+            return CmuxSurfaceTabBarBuiltInAction.tilePanes.configID
         default:
             return nil
         }
@@ -7592,6 +7596,15 @@ struct ContentView: View {
                 when: { $0.bool(CommandPaletteContextKeys.workspaceHasSplits) }
             )
         )
+        contributions.append(
+            CommandPaletteCommandContribution(
+                commandId: "palette.tilePanes",
+                title: constant(String(localized: "command.tilePanes.title", defaultValue: "Tile Panes")),
+                subtitle: workspaceSubtitle,
+                keywords: ["split", "tile", "grid", "organize", "layout"],
+                when: { $0.bool(CommandPaletteContextKeys.workspaceHasSplits) }
+            )
+        )
 
         let cmuxConfigDefaultSubtitle = String(localized: "command.cmuxConfig.subtitle", defaultValue: "cmux.json")
         for issue in cmuxConfigStore.configurationIssues {
@@ -8208,6 +8221,13 @@ struct ContentView: View {
             if let workspace = tabManager.selectedWorkspace, !tabManager.equalizeSplits(tabId: workspace.id) {
 #if DEBUG
                 cmuxDebugLog("palette.equalizeSplits result=noSplitOrFailed workspaceId=\(workspace.id)")
+#endif
+            }
+        }
+        registry.register(commandId: "palette.tilePanes") {
+            if let workspace = tabManager.selectedWorkspace, !tabManager.tilePanes(tabId: workspace.id) {
+#if DEBUG
+                cmuxDebugLog("palette.tilePanes result=noSplitOrFailed workspaceId=\(workspace.id)")
 #endif
             }
         }
